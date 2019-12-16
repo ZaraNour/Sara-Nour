@@ -1,0 +1,522 @@
+{
+	"info": {
+		"_postman_id": "1225236b-9e7e-4f6d-b0d5-b63f34121641",
+		"name": "BestBuyAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0735eb3e-8e75-4f7b-898c-b9726f975b4e",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"pm.test(\"response must be valid and have a body\", function () {",
+									"     pm.response.to.be.ok; ",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response should have array of data items equal to limit\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var limit = jsonData.limit;",
+									"",
+									"    pm.expect(jsonData.data.length).to.eql(limit);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee55f3a8-6388-42f2-b0bc-42dae09817cd",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(20);",
+									"});",
+									"",
+									"pm.test(\"response must be valid and have a body\", function () {",
+									"     pm.response.to.be.ok; ",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response should have object of data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(typeof(jsonData.data)).to.eql('object');",
+									"});",
+									"",
+									"pm.test(\"response should have product name correspend to product id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var name = jsonData.data[0].name;",
+									"    pm.expect(name).to.eql(pm.environment.get('product_name'));",
+									"",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products?id={{product_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{product_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product - Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "327a4d88-74b4-4ed1-b199-37c622596098",
+								"exec": [
+									"pm.test(\"response is invalid to request without required parameters\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef1fb162-999d-44ad-b1e0-62fc28c384cc",
+								"exec": [
+									"pm.test(\"environment to be Testing\", function () {",
+									"    pm.expect(pm.environment.get(\"env\")).to.equal(\"Testing\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "{new_product_name}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{new_product_type}",
+									"type": "text"
+								},
+								{
+									"key": "upc",
+									"value": "{new_product_upc}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{new_product_description}",
+									"type": "text"
+								},
+								{
+									"key": "model",
+									"value": "{new_product_model}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products?id={{product_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{product_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Stores",
+			"item": [
+				{
+					"name": "Get Stores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0735eb3e-8e75-4f7b-898c-b9726f975b4e",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"pm.test(\"response must be valid and have a body\", function () {",
+									"     pm.response.to.be.ok; ",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response should have array of data items equal to limit\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var limit = jsonData.limit;",
+									"",
+									"    pm.expect(jsonData.data.length).to.eql(limit);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee55f3a8-6388-42f2-b0bc-42dae09817cd",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(20);",
+									"});",
+									"",
+									"pm.test(\"response must be valid and have a body\", function () {",
+									"     pm.response.to.be.ok; ",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response should have object of data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(typeof(jsonData.data)).to.eql('object');",
+									"});",
+									"",
+									"pm.test(\"response should have product name correspend to product id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var name = jsonData.data[0].name;",
+									"    pm.expect(name).to.eql(pm.environment.get('product_name'));",
+									"",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products?id={{product_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{product_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Store- Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "327a4d88-74b4-4ed1-b199-37c622596098",
+								"exec": [
+									"pm.test(\"response is invalid to request without required parameters\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef1fb162-999d-44ad-b1e0-62fc28c384cc",
+								"exec": [
+									"pm.test(\"environment to be Testing\", function () {",
+									"    pm.expect(pm.environment.get(\"env\")).to.equal(\"Testing\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "{new_product_type}",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "{new_product_upc}",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "{new_product_description}",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "{new_product_model}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3030/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Store",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/products?id={{store_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{store_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
